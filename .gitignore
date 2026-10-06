@@ -1,7 +1,7 @@
-# Anthropic SDK preview builds: confidential, local testing only. Never commit (this repo goes public).
+# Anthropic SDK builds used before the toolset helpers are published: local only, never committed.
 vendor/
 
-# Anthropic's raw inputs and experiments from anthropic-toolsets: internal, never committed.
+# Local notes and experiments: never committed.
 docs/raw/
 experimental/
 
@@ -9,3 +9,24 @@ experimental/
 .env
 .env.*
 !.env.example
+
+# Dependencies and tool caches.
+node_modules/
+.venv/
+.ruff_cache/
+__pycache__/
+
+# Build output and local run output: regenerate, don't commit.
+dist/
+*.egg-info/
+results/
+
+# Browser runtime assets, built from packages/claude-toolsets-runtime into both packages.
+/packages/claude-toolsets-js/src/generated/
+/packages/claude-toolsets-python/e2b_claude_toolsets/_runtime/
+
+# Personal agent notes.
+/AGENTS.md
+CLAUDE.md
+DECISIONS.md
+EXECUTION_PLAN.md
