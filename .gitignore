@@ -1,0 +1,7 @@
+# Anthropic SDK preview builds: confidential, local testing only. Never commit (this repo goes public).
+vendor/
+
+# Credentials.
+.env
+.env.*
+!.env.example
