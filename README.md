@@ -34,7 +34,8 @@ Requires pnpm 11, Bun 1.3.14 (runtime build and TypeScript tests), uv and Python
 
 ```sh
 pnpm install           # dependencies, then builds the browser runtime into both packages
-pnpm check             # lint, format, types, runtime drift, Python, Markdown
+pnpm check             # lint, format, types, npm build, runtime drift, Python, Markdown
+pnpm build             # npm package: compiled JS + .d.ts in packages/claude-toolsets-js/dist (pack and publish run it too)
 pnpm test:all          # TypeScript, runtime (local Chromium: pnpm setup:browsers) and Python unit tests
 ```
 

@@ -4,10 +4,29 @@
   "description": "E2B drivers for the browser and computer use toolsets in the Claude SDKs",
   "license": "Apache-2.0",
   "type": "module",
-  "repository": { "type": "git", "url": "git+https://github.com/e2b-dev/claude-toolsets.git", "directory": "packages/claude-toolsets-js" },
-  "exports": { ".": "./src/index.ts" },
-  "files": ["src"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/e2b-dev/claude-toolsets.git",
+    "directory": "packages/claude-toolsets-js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "claude-toolsets-source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && mkdir -p dist/generated && cp src/generated/runtime.js src/generated/manifest.json src/generated/THIRD_PARTY_LICENSES.txt dist/generated/",
+    "prepack": "pnpm build",
     "test": "bun test tests/*.test.ts",
     "exercise": "bun --env-file=../../.env tests/exercise.ts",
     "exercise:detach": "bun --env-file=../../.env tests/detach.ts",
@@ -32,6 +51,7 @@
     "@types/bun": "1.3.14",
     "@types/node": "24.0.0",
     "@types/ws": "8.18.1",
-    "playwright": "1.62.1"
+    "playwright": "1.62.1",
+    "typescript": "5.9.3"
   }
 }

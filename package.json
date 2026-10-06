@@ -6,6 +6,7 @@
   "scripts": {
     "prepare": "pnpm build:runtime",
     "build:runtime": "pnpm --filter @e2b/claude-toolsets-runtime build",
+    "build": "pnpm --filter @e2b/claude-toolsets build",
     "check:runtime": "pnpm --filter @e2b/claude-toolsets-runtime check",
     "test": "pnpm --filter @e2b/claude-toolsets test",
     "test:runtime": "pnpm --filter @e2b/claude-toolsets-runtime test",
@@ -18,12 +19,12 @@
     "fmt:py": "pnpm --filter @e2b/claude-toolsets-python fmt",
     "lint:md": "markdownlint-cli2",
     "fmt:md": "markdownlint-cli2 --fix",
-    "check": "pnpm build:runtime && pnpm lint:runtime && pnpm check:runtime && pnpm typecheck && pnpm lint:py && pnpm lint:md",
+    "check": "pnpm build:runtime && pnpm lint:runtime && pnpm check:runtime && pnpm typecheck && pnpm build && pnpm lint:py && pnpm lint:md",
     "setup:browsers": "pnpm --filter @e2b/claude-toolsets-runtime exec playwright install chromium --only-shell",
-    "example": "bun examples/1-run.ts",
-    "example:exercise": "bun examples/2-exercise.ts",
-    "example:advanced": "bun examples/3-advanced.ts",
-    "example:computer": "bun examples/4-computer.ts"
+    "example": "bun --conditions=claude-toolsets-source examples/1-run.ts",
+    "example:exercise": "bun --conditions=claude-toolsets-source examples/2-exercise.ts",
+    "example:advanced": "bun --conditions=claude-toolsets-source examples/3-advanced.ts",
+    "example:computer": "bun --conditions=claude-toolsets-source examples/4-computer.ts"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "file:./vendor/anthropic-ai-sdk-preview-1f583e9.tgz",
