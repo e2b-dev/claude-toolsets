@@ -12,6 +12,7 @@
     "noImplicitOverride": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "customConditions": ["claude-toolsets-source"]
   }
 }
