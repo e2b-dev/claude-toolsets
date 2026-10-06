@@ -48,6 +48,10 @@ pnpm -F @e2b/claude-toolsets test:live         # model-driven browser and comput
 pnpm -F @e2b/claude-toolsets-python test:live  # the same from Python
 ```
 
+## Releasing
+
+Describe each change with `pnpm changeset` and commit the file with it. After merging, run `gh workflow run release.yml --ref main`: it bumps both packages to the same version, publishes `@e2b/claude-toolsets` to npm and `e2b-claude-toolsets` to PyPI over trusted publishing (no tokens), and tags the release on GitHub. Don't run `changeset version` locally; the workflow does.
+
 ## Before the SDK release
 
 The toolset helpers are not on npm or PyPI yet, so until they are, the manifests point `@anthropic-ai/sdk` and `anthropic` at local builds in `vendor/` (gitignored). The code already imports the final names, so the swap is one line per language:

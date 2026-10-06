@@ -4,7 +4,7 @@ Synchronous and native asyncio browser and computer drivers for Anthropic toolse
 
 ## Development
 
-Developing from Git requires Python 3.10+, uv, pnpm and Bun 1.3.14; see the [repo README](../../README.md#development).
+Developing from Git requires Python 3.10+, uv, pnpm and Bun 1.3.14; see the [repo README](https://github.com/e2b-dev/claude-toolsets#development).
 
 ```sh
 pnpm install                      # repo root: JS dependencies and the browser runtime
