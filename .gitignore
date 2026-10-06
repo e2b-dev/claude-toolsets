@@ -1,6 +1,10 @@
 # Anthropic SDK preview builds: confidential, local testing only. Never commit (this repo goes public).
 vendor/
 
+# Anthropic's raw inputs and experiments from anthropic-toolsets: internal, never committed.
+docs/raw/
+experimental/
+
 # Credentials.
 .env
 .env.*
