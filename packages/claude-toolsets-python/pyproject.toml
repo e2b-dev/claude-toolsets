@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "e2b-claude-toolsets"
+version = "0.0.0"
+description = "E2B browser and computer drivers for Anthropic toolsets"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["anthropic==1.9.0", "e2b>=2.51.0,<3", "e2b-desktop>=2.6.0,<3", "websockets>=16.0", "httpx>=0.28.1,<1"]
+
+[dependency-groups]
+dev = ["ruff", "ty", "build"]
+
+[tool.hatch.build.hooks.custom]
+
+[tool.hatch.build.targets.wheel]
+packages = ["e2b_claude_toolsets"]
+
+[tool.hatch.build.targets.sdist]
+include = ["e2b_claude_toolsets", "pyproject.toml", "hatch_build.py", "README.md", "tests/*.py", "tests/live/detach.py", "tests/live/lifecycle.py", "tests/live/computer.py", "tests/live/headless.py", "tests/live/security.py"]
+
+[tool.uv]
+exclude-newer = "7 days"
+
+[tool.uv.sources]
+anthropic = { path = "../../vendor/anthropic-1.9.0-py3-none-any.whl" }
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+include = ["hatch_build.py", "e2b_claude_toolsets/**/*.py", "tests/**/*.py"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ty.environment]
+python = "./.venv"
+
+[tool.ty.src]
+include = ["e2b_claude_toolsets", "tests"]

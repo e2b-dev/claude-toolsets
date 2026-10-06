@@ -1,0 +1,4 @@
+{
+  // Python tooling (ty, ruff) uses uv's environment for the Python package: `uv sync` in packages/claude-toolsets-python creates it.
+  "python.defaultInterpreterPath": "${workspaceFolder}/packages/claude-toolsets-python/.venv/bin/python"
+}

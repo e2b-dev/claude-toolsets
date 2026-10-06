@@ -1,0 +1,41 @@
+{
+  "name": "claude-toolsets",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "prepare": "pnpm build:runtime",
+    "build:runtime": "pnpm --filter @e2b/claude-toolsets-runtime build",
+    "check:runtime": "pnpm --filter @e2b/claude-toolsets-runtime check",
+    "test": "pnpm --filter @e2b/claude-toolsets test",
+    "test:runtime": "pnpm --filter @e2b/claude-toolsets-runtime test",
+    "test:py": "pnpm --filter @e2b/claude-toolsets-python test",
+    "test:all": "pnpm test && pnpm test:runtime && pnpm test:py",
+    "typecheck": "tsc --noEmit",
+    "lint:runtime": "eslint packages/claude-toolsets-runtime/src packages/claude-toolsets-js/src/page-scripts.ts && prettier --check 'packages/claude-toolsets-runtime/**/*.ts' packages/claude-toolsets-runtime/tsconfig.json packages/claude-toolsets-js/src/page-scripts.ts eslint.config.mjs",
+    "fmt:runtime": "eslint packages/claude-toolsets-runtime/src packages/claude-toolsets-js/src/page-scripts.ts --fix && prettier --write 'packages/claude-toolsets-runtime/**/*.ts' packages/claude-toolsets-runtime/tsconfig.json packages/claude-toolsets-js/src/page-scripts.ts eslint.config.mjs",
+    "lint:py": "pnpm --filter @e2b/claude-toolsets-python lint",
+    "fmt:py": "pnpm --filter @e2b/claude-toolsets-python fmt",
+    "lint:md": "markdownlint-cli2",
+    "fmt:md": "markdownlint-cli2 --fix",
+    "check": "pnpm build:runtime && pnpm lint:runtime && pnpm check:runtime && pnpm typecheck && pnpm lint:py && pnpm lint:md",
+    "setup:browsers": "pnpm --filter @e2b/claude-toolsets-runtime exec playwright install chromium --only-shell",
+    "example": "bun examples/1-run.ts",
+    "example:exercise": "bun examples/2-exercise.ts",
+    "example:advanced": "bun examples/3-advanced.ts",
+    "example:computer": "bun examples/4-computer.ts"
+  },
+  "devDependencies": {
+    "@anthropic-ai/sdk": "file:./vendor/anthropic-ai-sdk-preview-1f583e9.tgz",
+    "@e2b/claude-toolsets": "workspace:*",
+    "@e2b/desktop": "^2.4.0",
+    "@eslint/js": "9.39.5",
+    "@types/bun": "1.3.14",
+    "@types/node": "24.0.0",
+    "eslint": "9.39.5",
+    "markdownlint-cli2": "0.23.3",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.70.1"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "@e2b/claude-toolsets",
+  "version": "0.0.0",
+  "description": "E2B drivers for the browser and computer use toolsets in the Claude SDKs",
+  "license": "Apache-2.0",
+  "type": "module",
+  "repository": { "type": "git", "url": "git+https://github.com/e2b-dev/claude-toolsets.git", "directory": "packages/claude-toolsets-js" },
+  "exports": { ".": "./src/index.ts" },
+  "files": ["src"],
+  "scripts": {
+    "test": "bun test tests/*.test.ts",
+    "exercise": "bun --env-file=../../.env tests/exercise.ts",
+    "exercise:detach": "bun --env-file=../../.env tests/detach.ts",
+    "exercise:lifecycle": "bun --env-file=../../.env tests/lifecycle.ts",
+    "exercise:cancel": "bun --env-file=../../.env tests/cancel.ts",
+    "exercise:computer": "bun --env-file=../../.env tests/computer.ts",
+    "exercise:headless": "bun --env-file=../../.env tests/headless.ts",
+    "exercise:security": "bun --env-file=../../.env tests/security.ts",
+    "test:live": "bun --env-file=../../.env tests/live/model.ts",
+    "test:live:computer": "bun --env-file=../../.env tests/live/computer.ts"
+  },
+  "dependencies": {
+    "@e2b/desktop": "^2.4.0",
+    "e2b": "^2.51.0",
+    "ws": "8.22.0"
+  },
+  "peerDependencies": {
+    "@anthropic-ai/sdk": "*"
+  },
+  "devDependencies": {
+    "@anthropic-ai/sdk": "file:../../vendor/anthropic-ai-sdk-preview-1f583e9.tgz",
+    "@types/bun": "1.3.14",
+    "@types/node": "24.0.0",
+    "@types/ws": "8.18.1",
+    "playwright": "1.62.1"
+  }
+}

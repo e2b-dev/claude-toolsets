@@ -1,0 +1,18 @@
+// markdownlint config, read by `pnpm lint:md` / `pnpm fmt:md` and the markdownlint editor extension.
+{
+  "config": {
+    // Prose is soft-wrapped; tables and links make hard wrapping impractical.
+    "MD013": false,
+  },
+  "globs": ["**/*.md"],
+  "ignores": [
+    "**/node_modules/**",
+    // uv's Python environment: third-party package docs.
+    "**/.venv/**",
+    // Local only, gitignored.
+    "vendor/**",
+    "docs/raw/**",
+    "experimental/**",
+    "results/**",
+  ],
+}
