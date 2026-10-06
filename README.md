@@ -1,62 +1,47 @@
-# E2B Claude Toolsets
+# Claude Toolsets - E2B
 
-E2B drivers for the browser and computer use toolsets in the Claude SDKs. Compatible with Claude.
+*Pre-release: built for the browser and computer use helpers coming to the Claude SDKs. Usage docs land with that release.*
 
-- npm: `@e2b/claude-toolsets` ([TypeScript guide](packages/claude-toolsets-js/README.md))
-- PyPI: `e2b-claude-toolsets` ([Python guide](packages/claude-toolsets-python/README.md))
-- [Examples](examples/README.md) for both languages
+Run Claude's browser use and computer use on [E2B](https://e2b.dev) sandboxes instead of your own machine. Each sandbox is an isolated cloud Linux desktop with Chrome, and you can watch it live while Claude works. Available for TypeScript and Python.
 
-## Repository structure
+| | Package | Registry |
+| --- | --- | --- |
+| TypeScript | `@e2b/claude-toolsets` | [npm](https://www.npmjs.com/package/@e2b/claude-toolsets) |
+| Python | `e2b-claude-toolsets` | PyPI (with the first release) |
 
-```text
-e2b-dev/claude-toolsets/
-├── packages/
-│   ├── claude-toolsets-runtime/      # private: shared page-side bundle, built into both packages
-│   │   ├── src/
-│   │   ├── tests/                    # both language bridges against local Chromium
-│   │   └── build.ts
-│   ├── claude-toolsets-js/           # npm: @e2b/claude-toolsets
-│   │   ├── src/
-│   │   └── tests/                    # unit tests (*.test.ts), live exercises (*.ts), live/
-│   └── claude-toolsets-python/       # PyPI: e2b-claude-toolsets
-│       ├── e2b_claude_toolsets/
-│       ├── tests/                    # unit tests (test_*.py), live/
-│       ├── pyproject.toml
-│       └── uv.lock
-├── examples/
-├── package.json
-└── pnpm-workspace.yaml               # packages/*
+## Setup
+
+```bash
+npm i @e2b/claude-toolsets @anthropic-ai/sdk
+# or
+pip install e2b-claude-toolsets anthropic
 ```
 
-## Development
+Set `E2B_API_KEY` ([get one](https://e2b.dev/dashboard)) and `ANTHROPIC_API_KEY`.
 
-Requires pnpm 11, Bun 1.3.14 (runtime build and TypeScript tests), uv and Python 3.10+.
+## Usage
 
-```sh
-pnpm install           # dependencies, then builds the browser runtime into both packages
-pnpm check             # lint, format, types, npm build, runtime drift, Python, Markdown
-pnpm build             # npm package: compiled JS + .d.ts in packages/claude-toolsets-js/dist (pack and publish run it too)
-pnpm test:all          # TypeScript, runtime (local Chromium: pnpm setup:browsers) and Python unit tests
-```
+<!-- TODO(SDK release): TypeScript and Python quickstarts for browser and computer use, once the Claude SDK helpers are public. -->
 
-Live checks create billable E2B desktops; the model checks also call Anthropic. Put `E2B_API_KEY` and `ANTHROPIC_API_KEY` in `.env` at the repo root (see `.env.example`):
+Coming with the Claude SDK release.
 
-```sh
-pnpm example                                   # TypeScript examples: example, example:exercise, example:advanced, example:computer
-pnpm -F @e2b/claude-toolsets exercise          # every browser member, no model; also exercise:computer, :lifecycle, :security, ...
-pnpm -F @e2b/claude-toolsets test:live         # model-driven browser and computer checks
-pnpm -F @e2b/claude-toolsets-python test:live  # the same from Python
-```
+## Good to know
 
-## Releasing
+- Runs on the standard E2B desktop sandbox: nothing to build or configure first.
+- The sandbox stays private. Its ports are not exposed; the live view is proxied through your machine on a random local URL, so only you can watch.
+- Two layers of network control: an egress allowlist that E2B enforces outside the browser, and a host allowlist checked before every navigation. Use both.
+- Screens up to 2560×1440 pixels in total (default 1280×800); larger sizes are refused rather than silently scaled.
+- You close what you create: a sandbox the driver created is killed on close, one you pass in keeps running.
+- Python has both sync and native asyncio drivers.
 
-Describe each change with `pnpm changeset` and commit the file with it. After merging, run `gh workflow run release.yml --ref main`: it bumps both packages to the same version, publishes `@e2b/claude-toolsets` to npm and `e2b-claude-toolsets` to PyPI over trusted publishing (no tokens), and tags the release on GitHub. Don't run `changeset version` locally; the workflow does.
+## Examples
 
-## Before the SDK release
+- [`1-run.ts`](https://github.com/e2b-dev/claude-toolsets/blob/main/examples/1-run.ts) / [`1-run.py`](https://github.com/e2b-dev/claude-toolsets/blob/main/examples/1-run.py): Claude drives Chrome on an E2B desktop while you watch live
+- [`2-exercise.ts`](https://github.com/e2b-dev/claude-toolsets/blob/main/examples/2-exercise.ts) / [`2-exercise.py`](https://github.com/e2b-dev/claude-toolsets/blob/main/examples/2-exercise.py): no model, just E2B: a smoke test of the package
+- [`3-advanced.ts`](https://github.com/e2b-dev/claude-toolsets/blob/main/examples/3-advanced.ts): SDK options passed through unchanged
+- [`4-computer.ts`](https://github.com/e2b-dev/claude-toolsets/blob/main/examples/4-computer.ts) / [`4-computer.py`](https://github.com/e2b-dev/claude-toolsets/blob/main/examples/4-computer.py): computer use, Claude works the whole desktop (a terminal, then the file manager)
+- [`5-async-run.py`](https://github.com/e2b-dev/claude-toolsets/blob/main/examples/5-async-run.py) / [`6-async-exercise.py`](https://github.com/e2b-dev/claude-toolsets/blob/main/examples/6-async-exercise.py): the same with Python asyncio
 
-The toolset helpers are not on npm or PyPI yet, so until they are, the manifests point `@anthropic-ai/sdk` and `anthropic` at local builds in `vendor/` (gitignored). The code already imports the final names, so the swap is one line per language:
+## License
 
-1. Check the release has the helpers. npm: `npm pack @anthropic-ai/sdk@<version>` contains `package/helpers/beta/toolsets/`. PyPI: the wheel contains `anthropic/tools/browser.py` and `anthropic/tools/computer.py`.
-2. TypeScript: replace both `file:` values of `@anthropic-ai/sdk` (root and `packages/claude-toolsets-js/package.json`) with the version, set the peer range, then `pnpm install` once with the 7-day `minimumReleaseAge` lifted.
-3. Python: in `packages/claude-toolsets-python/pyproject.toml` set `anthropic==<version>` and delete `[tool.uv.sources]`, then `uv lock --exclude-newer-package anthropic=<now, RFC 3339>`.
-4. Delete this section, then run `pnpm check`, `pnpm test:all` and the live checks.
+[Apache-2.0](https://github.com/e2b-dev/claude-toolsets/blob/main/LICENSE)
