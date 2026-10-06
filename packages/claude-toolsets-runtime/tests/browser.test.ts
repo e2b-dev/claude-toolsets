@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { chromium, type Browser, type CDPSession, type Page } from 'playwright';
 import {
   fileInputExpr,
+  fileInputValidationArguments,
   fileInputValidationFunction,
   ReferenceAllocator,
   runtimeExpression,
@@ -87,14 +88,30 @@ for (const bridge of ['typescript', 'python'] as const) {
       await page?.context().close();
     });
 
-    function expression<K extends Operation>(operation: K, args: OperationArgs[K]): string {
-      if (bridge === 'typescript') return runtimeExpression(operation, args);
+    /** Ask the real Python bridge (`tests/python-expression.py`) for what it would send. */
+    function python(request: unknown): string {
       const result = Bun.spawnSync([process.env.PYTHON ?? 'python3', 'tests/python-expression.py'], {
         cwd: new URL('../', import.meta.url).pathname,
-        stdin: Buffer.from(JSON.stringify({ operation, args })),
+        stdin: Buffer.from(JSON.stringify(request)),
       });
       if (result.exitCode !== 0) throw new Error(result.stderr.toString());
       return result.stdout.toString();
+    }
+    function expression<K extends Operation>(operation: K, args: OperationArgs[K]): string {
+      return bridge === 'typescript' ? runtimeExpression(operation, args) : python({ operation, args });
+    }
+    function fileInput(ref: string, count: number): string {
+      return bridge === 'typescript'
+        ? fileInputExpr(ref, count, nextRef)
+        : python({ file_input: { ref, count, base: nextRef } });
+    }
+    function validation(ref: string, count: number): { functionDeclaration: string; arguments: { value: unknown }[] } {
+      if (bridge === 'typescript')
+        return {
+          functionDeclaration: fileInputValidationFunction,
+          arguments: fileInputValidationArguments(ref, count, nextRef),
+        };
+      return JSON.parse(python({ validation: { ref, count, base: nextRef } }));
     }
     async function call<K extends Operation>(
       operation: K,
@@ -364,83 +381,77 @@ for (const bridge of ['typescript', 'python'] as const) {
       if (!result.ok) expect(result.error).toEqual({ code: 'script_failed', message: 'The page script failed' });
     });
 
-    if (bridge === 'typescript') {
-      for (const kind of ['shadow', 'slot'] as const)
-        for (const attribute of ['inert', 'aria-disabled'] as const)
-          test(`rejects ${kind} file inputs when an ancestor becomes ${attribute}`, async () => {
-            await page.evaluate((kind) => {
-              const host = document.querySelector('#shadow')!;
-              host.shadowRoot!.innerHTML =
-                kind === 'shadow' ? '<label>Upload<input type="file"></label>' : '<section><slot></slot></section>';
-              if (kind === 'slot') host.innerHTML = '<label>Upload<input type="file"></label>';
-            }, kind);
-            const ref = await findRef('Upload');
-            const target = await cdp.send('Runtime.evaluate', {
-              expression: fileInputExpr(ref, 1, nextRef),
-              contextId,
-              returnByValue: false,
-              awaitPromise: true,
-            });
-            expect(target.result.subtype).toBe('node');
-            const objectId = target.result.objectId!;
-            const recheck = () =>
-              cdp.send('Runtime.callFunctionOn', {
-                objectId,
-                functionDeclaration: fileInputValidationFunction(ref, 1, nextRef),
-                returnByValue: true,
-                awaitPromise: true,
-              });
-            expect((await recheck()).result.value).toBe(true);
-            await page.evaluate(
-              ({ kind, attribute }) => {
-                const host = document.querySelector('#shadow')!;
-                const ancestor = kind === 'slot' ? host.shadowRoot!.querySelector('section')! : host;
-                ancestor.setAttribute(attribute, 'true');
-              },
-              { kind, attribute },
-            );
-            expect((await recheck()).result.value).toBe(false);
-            const invalid = await cdp.send('Runtime.evaluate', {
-              expression: fileInputExpr(ref, 1, nextRef),
-              contextId,
-              returnByValue: true,
-              awaitPromise: true,
-            });
-            expect(invalid.result.value.error).toContain('disabled or inert');
-            await cdp.send('Runtime.releaseObject', { objectId });
+    for (const kind of ['shadow', 'slot'] as const)
+      for (const attribute of ['inert', 'aria-disabled'] as const)
+        test(`rejects ${kind} file inputs when an ancestor becomes ${attribute}`, async () => {
+          await page.evaluate((kind) => {
+            const host = document.querySelector('#shadow')!;
+            host.shadowRoot!.innerHTML =
+              kind === 'shadow' ? '<label>Upload<input type="file"></label>' : '<section><slot></slot></section>';
+            if (kind === 'slot') host.innerHTML = '<label>Upload<input type="file"></label>';
+          }, kind);
+          const ref = await findRef('Upload');
+          const target = await cdp.send('Runtime.evaluate', {
+            expression: fileInput(ref, 1),
+            contextId,
+            returnByValue: false,
+            awaitPromise: true,
           });
-    }
+          expect(target.result.subtype).toBe('node');
+          const objectId = target.result.objectId!;
+          const check = validation(ref, 1);
+          expect(check.functionDeclaration).not.toContain(ref); // the request travels as an argument, never as source
+          const recheck = () =>
+            cdp.send('Runtime.callFunctionOn', { objectId, ...check, returnByValue: true, awaitPromise: true });
+          expect((await recheck()).result.value).toBe(true);
+          await page.evaluate(
+            ({ kind, attribute }) => {
+              const host = document.querySelector('#shadow')!;
+              const ancestor = kind === 'slot' ? host.shadowRoot!.querySelector('section')! : host;
+              ancestor.setAttribute(attribute, 'true');
+            },
+            { kind, attribute },
+          );
+          expect((await recheck()).result.value).toBe(false);
+          const invalid = await cdp.send('Runtime.evaluate', {
+            expression: fileInput(ref, 1),
+            contextId,
+            returnByValue: true,
+            awaitPromise: true,
+          });
+          expect(invalid.result.value.error).toContain('disabled or inert');
+          await cdp.send('Runtime.releaseObject', { objectId });
+        });
 
-    if (bridge === 'typescript')
-      test('returns a pinned file input node through CDP', async () => {
-        const ref = await findRef('Files');
-        const result = await cdp.send('Runtime.evaluate', {
-          expression: fileInputExpr(ref, 1, nextRef),
-          contextId,
-          returnByValue: false,
-          awaitPromise: true,
-        });
-        expect(result.exceptionDetails).toBeUndefined();
-        expect(result.result.subtype).toBe('node');
-        const objectId = result.result.objectId!;
-        const node = await cdp.send('DOM.describeNode', { objectId });
-        expect(node.node.nodeName).toBe('INPUT');
-        await cdp.send('Runtime.releaseObject', { objectId });
-        const invalid = await cdp.send('Runtime.evaluate', {
-          expression: fileInputExpr(ref, 2, nextRef),
-          contextId,
-          returnByValue: false,
-          awaitPromise: true,
-        });
-        expect(invalid.result.subtype).not.toBe('node');
-        const details = await cdp.send('Runtime.callFunctionOn', {
-          objectId: invalid.result.objectId!,
-          functionDeclaration: 'function(){return this.error}',
-          returnByValue: true,
-        });
-        expect(details.result.value).toContain('multiple files');
-        await cdp.send('Runtime.releaseObject', { objectId: invalid.result.objectId! });
+    test('returns a pinned file input node through CDP', async () => {
+      const ref = await findRef('Files');
+      const result = await cdp.send('Runtime.evaluate', {
+        expression: fileInput(ref, 1),
+        contextId,
+        returnByValue: false,
+        awaitPromise: true,
       });
+      expect(result.exceptionDetails).toBeUndefined();
+      expect(result.result.subtype).toBe('node');
+      const objectId = result.result.objectId!;
+      const node = await cdp.send('DOM.describeNode', { objectId });
+      expect(node.node.nodeName).toBe('INPUT');
+      await cdp.send('Runtime.releaseObject', { objectId });
+      const invalid = await cdp.send('Runtime.evaluate', {
+        expression: fileInput(ref, 2),
+        contextId,
+        returnByValue: false,
+        awaitPromise: true,
+      });
+      expect(invalid.result.subtype).not.toBe('node');
+      const details = await cdp.send('Runtime.callFunctionOn', {
+        objectId: invalid.result.objectId!,
+        functionDeclaration: 'function(){return this.error}',
+        returnByValue: true,
+      });
+      expect(details.result.value).toContain('multiple files');
+      await cdp.send('Runtime.releaseObject', { objectId: invalid.result.objectId! });
+    });
   });
 }
 

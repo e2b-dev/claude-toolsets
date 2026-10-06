@@ -27,10 +27,11 @@ from ._computer import duration, integer, screen_size
 from ._policy import check_url, local_host
 from ._sandbox import BrowserRuntime, resolve_display
 from ._scripts import (
+    FILE_INPUT_VALIDATION,
     RUNTIME_SOURCE,
     expression,
     file_input_expression,
-    file_input_validation,
+    file_input_validation_arguments,
     runtime_result,
 )
 from ._uploads import prepare_uploads
@@ -841,7 +842,8 @@ class E2BBrowserToolset(BrowserStateMixin, BetaAbstractBrowserToolset20260801):
                 "Runtime.callFunctionOn",
                 dict(
                     objectId=object_id,
-                    functionDeclaration=file_input_validation(input.target.ref, count, self._reserve_refs()),
+                    functionDeclaration=FILE_INPUT_VALIDATION,
+                    arguments=file_input_validation_arguments(input.target.ref, count, self._reserve_refs()),
                     returnByValue=True,
                     awaitPromise=True,
                 ),
