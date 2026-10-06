@@ -24,4 +24,4 @@ try {
 }
 ```
 
-Needs `E2B_API_KEY` and `ANTHROPIC_API_KEY`. The [examples](../../examples/README.md) add a live view, computer use and SDK options.
+Needs `E2B_API_KEY` and `ANTHROPIC_API_KEY`. The [examples](https://github.com/e2b-dev/claude-toolsets/blob/main/examples/README.md) add a live view, computer use and SDK options.

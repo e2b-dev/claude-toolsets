@@ -7,6 +7,9 @@
     "lint": "uv run --frozen ruff check . ../../examples --config pyproject.toml && uv run --frozen ruff format --check . ../../examples --config pyproject.toml && uv run --frozen ty check . ../../examples",
     "fmt": "uv run --frozen ruff check --fix . ../../examples --config pyproject.toml && uv run --frozen ruff format . ../../examples --config pyproject.toml",
     "test:live": "uv run --frozen python tests/live/model.py",
-    "test:live:tabs": "uv run --frozen python tests/live/tabs.py"
+    "test:live:tabs": "uv run --frozen python tests/live/tabs.py",
+    "postVersion": "uv version --frozen $(pnpm pkg get version | tr -d '\"')",
+    "lock": "uv lock",
+    "release": "rm -rf dist && uv build && uv publish --trusted-publishing always --check-url https://pypi.org/simple/"
   }
 }

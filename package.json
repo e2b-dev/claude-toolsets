@@ -24,10 +24,14 @@
     "example": "bun --conditions=claude-toolsets-source examples/1-run.ts",
     "example:exercise": "bun --conditions=claude-toolsets-source examples/2-exercise.ts",
     "example:advanced": "bun --conditions=claude-toolsets-source examples/3-advanced.ts",
-    "example:computer": "bun --conditions=claude-toolsets-source examples/4-computer.ts"
+    "example:computer": "bun --conditions=claude-toolsets-source examples/4-computer.ts",
+    "changeset": "changeset",
+    "version": "changeset version && pnpm -r run postVersion && pnpm -r run lock",
+    "release": "pnpm build && pnpm --filter @e2b/claude-toolsets-python run release && changeset publish"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "file:./vendor/anthropic-ai-sdk-preview-1f583e9.tgz",
+    "@changesets/cli": "2.31.1",
     "@e2b/claude-toolsets": "workspace:*",
     "@e2b/desktop": "^2.4.0",
     "@eslint/js": "9.39.5",
