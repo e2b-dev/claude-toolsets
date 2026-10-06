@@ -11,4 +11,12 @@ assert spec is not None and spec.loader is not None
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 request = json.load(sys.stdin)
-print(module.RUNTIME_SOURCE if request.get("install") else module.expression(request["operation"], request["args"]))
+if request.get("install"):
+    print(module.RUNTIME_SOURCE)
+elif "file_input" in request:
+    print(module.file_input_expression(**request["file_input"]))
+elif "validation" in request:
+    arguments = module.file_input_validation_arguments(**request["validation"])
+    print(json.dumps({"functionDeclaration": module.FILE_INPUT_VALIDATION, "arguments": arguments}))
+else:
+    print(module.expression(request["operation"], request["args"]))

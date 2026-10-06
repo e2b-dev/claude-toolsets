@@ -87,8 +87,14 @@ export function fileInputExpr(ref: string, count: number, base: number): string 
   return `${runtimeExpression('file_input', { ref, count, base })}.then(result => result.ok ? result.value : {error: result.error.message})`;
 }
 
-/** Recheck the pinned node with the same composed-tree rules after asynchronous staging. */
-export function fileInputValidationFunction(ref: string, count: number, base: number): string {
-  const request = JSON.stringify({ operation: 'file_input', args: { ref, count, base } });
-  return `function(){return globalThis[${JSON.stringify(RUNTIME_KEY)}].call(${request}).then(result => result.ok && result.value === this)}`;
+/**
+ * Recheck the pinned node with the same composed-tree rules after asynchronous staging. `Runtime.callFunctionOn`
+ * runs this fixed source on the node; the request and the runtime key travel in `fileInputValidationArguments`,
+ * never as source.
+ */
+export const fileInputValidationFunction =
+  'function(request, key){return globalThis[key].call(request).then(result => result.ok && result.value === this)}';
+
+export function fileInputValidationArguments(ref: string, count: number, base: number) {
+  return [{ value: { operation: 'file_input', args: { ref, count, base } } }, { value: RUNTIME_KEY }];
 }

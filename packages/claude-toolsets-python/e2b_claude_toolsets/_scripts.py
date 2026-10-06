@@ -22,12 +22,16 @@ def file_input_expression(ref: str, count: int, base: int) -> str:
     )
 
 
-def file_input_validation(ref: str, count: int, base: int) -> str:
-    return (
-        "function(){return "
-        + expression("file_input", dict(ref=ref, count=count, base=base))
-        + (".then(result => result.ok && result.value === this)}")
-    )
+# Runtime.callFunctionOn runs this fixed source on the pinned node to recheck it after staging; the request and the
+# runtime key travel in file_input_validation_arguments, never as source.
+FILE_INPUT_VALIDATION = (
+    "function(request, key){return globalThis[key].call(request).then(result => result.ok && result.value === this)}"
+)
+
+
+def file_input_validation_arguments(ref: str, count: int, base: int) -> list[dict[str, Any]]:
+    request = {"operation": "file_input", "args": {"ref": ref, "count": count, "base": base}}
+    return [{"value": request}, {"value": _MANIFEST["key"]}]
 
 
 def runtime_result(value: Any) -> dict[str, Any]:

@@ -77,6 +77,7 @@ import * as Input from './input.ts';
 import {
   findExpr,
   fileInputExpr,
+  fileInputValidationArguments,
   fileInputValidationFunction,
   ReferenceAllocator,
   runtimeSource,
@@ -1648,7 +1649,8 @@ export class E2BBrowserToolset extends BetaAbstractBrowserToolset20260801 {
         throw new ToolError('file_upload: page changed while staging files; inspect it and retry');
       const valid = await this.#send<EvaluateResult>(tab, 'Runtime.callFunctionOn', {
         objectId,
-        functionDeclaration: fileInputValidationFunction(ref, paths.length + documents.length, this.#refs.reserve()),
+        functionDeclaration: fileInputValidationFunction,
+        arguments: fileInputValidationArguments(ref, paths.length + documents.length, this.#refs.reserve()),
         returnByValue: true,
         awaitPromise: true,
       });
