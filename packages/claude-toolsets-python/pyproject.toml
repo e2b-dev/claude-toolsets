@@ -8,7 +8,7 @@ version = "0.0.0"
 description = "E2B browser and computer drivers for Anthropic toolsets"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["anthropic==1.9.0", "e2b>=2.51.0,<3", "e2b-desktop>=2.6.0,<3", "websockets>=16.0", "httpx>=0.28.1,<1"]
+dependencies = ["anthropic>=1.12.0,<2", "e2b>=2.51.0,<3", "e2b-desktop>=2.6.0,<3", "websockets>=16.0", "httpx>=0.28.1,<1"]
 
 [dependency-groups]
 dev = ["ruff", "ty", "build"]
@@ -23,9 +23,8 @@ include = ["e2b_claude_toolsets", "pyproject.toml", "hatch_build.py", "README.md
 
 [tool.uv]
 exclude-newer = "7 days"
-
-[tool.uv.sources]
-anthropic = { path = "../../vendor/anthropic-1.9.0-py3-none-any.whl" }
+# anthropic 1.12.0 is the first release with the toolset helpers (2026-10-07); exempt it from the 7-day guard.
+exclude-newer-package = { anthropic = "2026-10-07T18:30:59Z" }
 
 [tool.ruff]
 line-length = 120

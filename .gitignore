@@ -1,6 +1,3 @@
-# Anthropic SDK builds used before the toolset helpers are published: local only, never committed.
-vendor/
-
 # Local notes and experiments: never committed.
 docs/raw/
 experimental/

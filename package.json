@@ -30,7 +30,7 @@
     "release": "pnpm build && pnpm --filter @e2b/claude-toolsets-python run release && changeset publish"
   },
   "devDependencies": {
-    "@anthropic-ai/sdk": "file:./vendor/anthropic-ai-sdk-preview-1f583e9.tgz",
+    "@anthropic-ai/sdk": "^0.132.0",
     "@changesets/cli": "2.31.1",
     "@e2b/claude-toolsets": "workspace:*",
     "@e2b/desktop": "^2.4.0",

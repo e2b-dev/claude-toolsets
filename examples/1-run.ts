@@ -8,9 +8,8 @@
  * runner, close it. The difference: the browser runs on a private E2B desktop instead of your machine, and `liveView`
  * streams that desktop to a local URL so you can watch.
  *
- * Needs ANTHROPIC_API_KEY and E2B_API_KEY (in .env). `@anthropic-ai/sdk` resolves to the vendored early-access build
- * (vendor/*.tgz) until the toolset helpers ship on npm. `@e2b/claude-toolsets` is not published either: the workspace links
- * packages/claude-toolsets-js, so the import reads exactly as it will once the package ships.
+ * Needs ANTHROPIC_API_KEY and E2B_API_KEY (in .env). In this repo the workspace links `@e2b/claude-toolsets` to
+ * packages/claude-toolsets-js, so the import reads exactly as it does with the published package.
  * `tui.*` only prints; remove those calls and this is plain package usage.
  */
 import Anthropic from '@anthropic-ai/sdk';

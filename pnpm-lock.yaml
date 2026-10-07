@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@anthropic-ai/sdk':
-        specifier: file:./vendor/anthropic-ai-sdk-preview-1f583e9.tgz
-        version: file:vendor/anthropic-ai-sdk-preview-1f583e9.tgz
+        specifier: ^0.132.0
+        version: 0.132.0
       '@changesets/cli':
         specifier: 2.31.1
         version: 2.31.1(@types/node@24.0.0)
@@ -58,8 +58,8 @@ importers:
         version: 8.22.0
     devDependencies:
       '@anthropic-ai/sdk':
-        specifier: file:../../vendor/anthropic-ai-sdk-preview-1f583e9.tgz
-        version: file:vendor/anthropic-ai-sdk-preview-1f583e9.tgz
+        specifier: ^0.132.0
+        version: 0.132.0
       '@types/bun':
         specifier: 1.3.14
         version: 1.3.14
@@ -98,9 +98,8 @@ importers:
 
 packages:
 
-  '@anthropic-ai/sdk@file:vendor/anthropic-ai-sdk-preview-1f583e9.tgz':
-    resolution: {integrity: sha512-zVLMPUbS3i3WuZBjO+CfLtmZJn+plMqP4Q/65ndSO/ImN1+NbmjlKlWdl1LEerVY8s4LlWcvQQXDDf3A7/Bt0Q==, tarball: file:vendor/anthropic-ai-sdk-preview-1f583e9.tgz}
-    version: 0.129.0-synced-cu-bu-toolset-helpers-2026-09
+  '@anthropic-ai/sdk@0.132.0':
+    resolution: {integrity: sha512-hsKXmb+GjIgGpaJRF7rf2yKFa1SPyVJPQhZLNPDYA4J5YRrcVh4jn/aozLRKHWXGCGM9MPw16S+ry+zKIKCr7Q==}
     hasBin: true
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
@@ -1262,7 +1261,7 @@ packages:
 
 snapshots:
 
-  '@anthropic-ai/sdk@file:vendor/anthropic-ai-sdk-preview-1f583e9.tgz':
+  '@anthropic-ai/sdk@0.132.0':
     dependencies:
       json-schema-to-ts: 3.1.1
       standardwebhooks: 1.1.1
