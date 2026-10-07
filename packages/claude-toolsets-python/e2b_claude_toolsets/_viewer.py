@@ -107,6 +107,8 @@ class LiveView:
             Headers(
                 {
                     "Content-Length": str(len(body)),
+                    # websockets closes the socket after any non-upgrade response; say so, or clients reuse it.
+                    "Connection": "close",
                     "Cache-Control": "no-store",
                     "Referrer-Policy": "no-referrer",
                     **(headers or {}),
