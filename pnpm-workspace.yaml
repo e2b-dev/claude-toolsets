@@ -3,3 +3,6 @@ packages:
 
 # Supply-chain guard: skip package versions published in the last 7 days (in minutes).
 minimumReleaseAge: 10080
+# @anthropic-ai/sdk 0.132.0 is the first release with the toolset helpers (2026-10-07); exempt it from the guard.
+minimumReleaseAgeExclude:
+  - '@anthropic-ai/sdk@0.132.0'

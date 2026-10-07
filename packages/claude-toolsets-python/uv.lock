@@ -6,6 +6,13 @@ resolution-markers = [
     "python_full_version < '3.12' or sys_platform != 'emscripten'",
 ]
 
+[options]
+exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for backwards compatibility when using relative exclude-newer values.
+exclude-newer-span = "P7D"
+
+[options.exclude-newer-package]
+anthropic = "2026-10-07T18:30:59Z"
+
 [[package]]
 name = "annotated-types"
 version = "0.8.0"
@@ -17,8 +24,8 @@ wheels = [
 
 [[package]]
 name = "anthropic"
-version = "1.9.0"
-source = { path = "../../vendor/anthropic-1.9.0-py3-none-any.whl" }
+version = "1.12.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
     { name = "docstring-parser" },
@@ -28,30 +35,10 @@ dependencies = [
     { name = "sniffio" },
     { name = "typing-extensions" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/9e/12/8d257f79868dca43175b1860618273ef52bb6c241bef29adf8808c8836ec/anthropic-1.12.0.tar.gz", hash = "sha256:a54f6a63e3a4ad94acca6fc9528da531a523bfc846d304d02d7f190d6b7c9b48", size = 1556079, upload-time = "2026-10-07T17:57:19.831Z" }
 wheels = [
-    { filename = "anthropic-1.9.0-py3-none-any.whl", hash = "sha256:2a02ec02f95171ae52db0c753d3c1e9238291686437e905e6e433aa9a4fe2793" },
+    { url = "https://files.pythonhosted.org/packages/ef/f8/799d742b26ebfc6dc67800fe4f17a5851c1c694c719cfa668de75a910be8/anthropic-1.12.0-py3-none-any.whl", hash = "sha256:e7781a0c88452e695ff5524b9daa490e9c0d47c1529cd0bc14370973e48b12d4", size = 1919670, upload-time = "2026-10-07T17:57:18.042Z" },
 ]
-
-[package.metadata]
-requires-dist = [
-    { name = "aiohttp", marker = "extra == 'aiohttp'", specifier = ">=3.10.0,<4" },
-    { name = "anyio", specifier = ">=4.1.0,<5" },
-    { name = "boto3", marker = "extra == 'aws'", specifier = ">=1.28.57,<2" },
-    { name = "boto3", marker = "extra == 'bedrock'", specifier = ">=1.28.57,<2" },
-    { name = "botocore", marker = "extra == 'aws'", specifier = ">=1.31.57,<2" },
-    { name = "botocore", marker = "extra == 'bedrock'", specifier = ">=1.31.57,<2" },
-    { name = "docstring-parser", specifier = ">=0.15,<1" },
-    { name = "google-auth", extras = ["requests"], marker = "extra == 'google-cloud'", specifier = ">=2,<3" },
-    { name = "google-auth", extras = ["requests"], marker = "extra == 'vertex'", specifier = ">=2,<3" },
-    { name = "httpx2", specifier = ">=2.0.0,<3" },
-    { name = "jiter", specifier = ">=0.4.0,<1" },
-    { name = "mcp", marker = "python_full_version >= '3.10' and extra == 'mcp'", specifier = ">=1.0,<3" },
-    { name = "pydantic", specifier = ">=1.10.0,<3" },
-    { name = "sniffio", specifier = ">=1,<2" },
-    { name = "standardwebhooks", marker = "extra == 'webhooks'", specifier = ">=1.0.1,<2" },
-    { name = "typing-extensions", specifier = ">=4.14,<5" },
-]
-provides-extras = ["aiohttp", "aws", "bedrock", "google-cloud", "mcp", "vertex", "webhooks"]
 
 [[package]]
 name = "anyio"
@@ -357,7 +344,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "anthropic", path = "../../vendor/anthropic-1.9.0-py3-none-any.whl" },
+    { name = "anthropic", specifier = ">=1.12.0,<2" },
     { name = "e2b", specifier = ">=2.51.0,<3" },
     { name = "e2b-desktop", specifier = ">=2.6.0,<3" },
     { name = "httpx", specifier = ">=0.28.1,<1" },

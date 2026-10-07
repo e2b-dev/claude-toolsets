@@ -47,10 +47,10 @@
     "ws": "8.22.0"
   },
   "peerDependencies": {
-    "@anthropic-ai/sdk": "*"
+    "@anthropic-ai/sdk": ">=0.132.0"
   },
   "devDependencies": {
-    "@anthropic-ai/sdk": "file:../../vendor/anthropic-ai-sdk-preview-1f583e9.tgz",
+    "@anthropic-ai/sdk": "^0.132.0",
     "@types/bun": "1.3.14",
     "@types/node": "24.0.0",
     "@types/ws": "8.18.1",

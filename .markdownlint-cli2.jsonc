@@ -10,7 +10,6 @@
     // uv's Python environment: third-party package docs.
     "**/.venv/**",
     // Local only, gitignored.
-    "vendor/**",
     "docs/raw/**",
     "experimental/**",
     "results/**",

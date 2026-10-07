@@ -67,8 +67,8 @@ cd packages/claude-toolsets-python && uv build
 
 Browser tests run the expressions produced by both real bridges in Chromium
 against local HTML fixtures. The Python expression helper loads only `_scripts.py`
-and needs Python 3.10+, without importing the preview SDK. Set `PYTHON` if that
-interpreter is not `python3`. Adapter tests separately use the actual preview SDK
+and needs Python 3.10+, without importing the Anthropic SDK. Set `PYTHON` if that
+interpreter is not `python3`. Adapter tests separately use the actual Anthropic SDK
 and local protocol fixtures. These tests create no E2B sandboxes or model calls.
 
 Quality tooling applies to handwritten source, not generated bundles:
@@ -100,8 +100,7 @@ builds the runtime, and the `files` allowlist of `@e2b/claude-toolsets` includes
 The Python Hatch hook builds from Git using Bun 1.3.14 and installed JS dependencies,
 then explicitly includes ignored assets and licenses in the wheel and sdist.
 Building a wheel from that sdist uses its bundled assets and verifies the checksum;
-it does not require Bun or Node. The internal Anthropic preview dependency still
-needs to be supplied separately. A missing bundle fails packaging rather than
+it does not require Bun or Node. A missing bundle fails packaging rather than
 producing an unusable package.
 
 ## Live verification
