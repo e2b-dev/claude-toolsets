@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "e2b-claude-toolsets"
-version = "0.0.0"
+version = "0.0.2"
 description = "E2B browser and computer drivers for Anthropic toolsets"
 readme = "README.md"
 requires-python = ">=3.10"
