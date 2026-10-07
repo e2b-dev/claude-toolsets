@@ -1,7 +1,7 @@
 {
   "name": "@e2b/claude-toolsets-python",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.2",
   "scripts": {
     "test": "uv run --frozen python -m unittest discover -s tests -q",
     "lint": "uv run --frozen ruff check . ../../examples --config pyproject.toml && uv run --frozen ruff format --check . ../../examples --config pyproject.toml && uv run --frozen ty check . ../../examples",

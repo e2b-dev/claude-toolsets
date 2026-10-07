@@ -1,6 +1,6 @@
 {
   "name": "@e2b/claude-toolsets",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "E2B drivers for the browser and computer use toolsets in the Claude SDKs",
   "license": "Apache-2.0",
   "type": "module",
