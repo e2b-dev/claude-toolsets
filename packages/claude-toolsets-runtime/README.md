@@ -6,7 +6,7 @@ here, then run `pnpm build:runtime` from the repo root. Both output directories 
 ```text
 packages/claude-toolsets-runtime/src/   typed DOM implementation and operation contract
           |
-       Bun build             pinned to 1.3.14; no SDK imports
+       Bun build             pinned to 1.4.4; no SDK imports
           |
           +--> packages/claude-toolsets-js/src/generated/runtime.js
           |    manifest.json + runtime-contract.ts
@@ -97,7 +97,7 @@ Packaging generates the assets before collecting files. The root `prepare` scrip
 builds the runtime, and the `files` allowlist of `@e2b/claude-toolsets` includes
 `src/`, so the generated copy ships in the npm package.
 
-The Python Hatch hook builds from Git using Bun 1.3.14 and installed JS dependencies,
+The Python Hatch hook builds from Git using Bun 1.4.4 and installed JS dependencies,
 then explicitly includes ignored assets and licenses in the wheel and sdist.
 Building a wheel from that sdist uses its bundled assets and verifies the checksum;
 it does not require Bun or Node. A missing bundle fails packaging rather than
