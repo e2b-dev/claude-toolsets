@@ -16,7 +16,7 @@ class RuntimeBuildHook(BuildHookInterface):
             try:
                 subprocess.run(["bun", "build.ts"], cwd=runtime, check=True)
             except FileNotFoundError as error:
-                raise RuntimeError("Building from Git requires Bun 1.3.14 and `pnpm install` first") from error
+                raise RuntimeError("Building from Git requires Bun 1.4.4 and `pnpm install` first") from error
 
         assets = root / "e2b_claude_toolsets/_runtime"
         for filename in ("runtime.js", "manifest.json", "THIRD_PARTY_LICENSES.txt"):

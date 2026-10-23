@@ -5,7 +5,7 @@ import { REF_BLOCK_SIZE, RUNTIME_KEY, RUNTIME_VERSION } from './src/contract.ts'
 
 const packages = new URL('../', import.meta.url);
 const check = process.argv.includes('--check');
-const expectedBun = '1.3.14';
+const expectedBun = '1.4.4';
 if (Bun.version !== expectedBun) throw new Error(`Build the runtime with Bun ${expectedBun}; found ${Bun.version}`);
 const build = await Bun.build({
   entrypoints: [fileURLToPath(new URL('src/install.ts', import.meta.url))],
