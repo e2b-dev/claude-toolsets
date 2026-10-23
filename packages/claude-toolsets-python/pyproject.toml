@@ -24,7 +24,9 @@ include = ["e2b_claude_toolsets", "pyproject.toml", "hatch_build.py", "README.md
 [tool.uv]
 exclude-newer = "7 days"
 # anthropic 1.12.0 is the first release with the toolset helpers (2026-10-07); exempt it from the 7-day guard.
-exclude-newer-package = { anthropic = "2026-10-07T18:30:59Z" }
+# certifi gets a shorter rolling window so CA-distrust releases land sooner; 2026.10.19 drops the
+# compromised emSign roots (https://github.com/certifi/python-certifi/pull/437).
+exclude-newer-package = { anthropic = "2026-10-07T18:30:59Z", certifi = "3 days" }
 
 [tool.ruff]
 line-length = 120
