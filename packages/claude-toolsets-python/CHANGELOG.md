@@ -1,5 +1,11 @@
 # @e2b/claude-toolsets-python
 
+## 0.0.4
+
+### Patch Changes
+
+- 5acb53d: Lock certifi 2026.10.19 in the Python package's development and build environment, the release that drops the compromised eMudhra intermediates. This updates the locked build and test environment; installed packages still use whatever certifi and certificate stores the user's environment provides.
+
 ## 0.0.3
 
 ### Patch Changes
